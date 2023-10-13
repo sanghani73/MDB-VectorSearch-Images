@@ -35,13 +35,15 @@ Install Python and the dependencies captured in the [requirements.txt](requireme
 pip install -r requirements.txt
 ```
 ### Load the Image Data
-You have two options to load the image data into the MongoDB Atlas cluster:
+Download the image files from Kaggle and them to the directory from which the app can display them as part of the results. To do this, download the dataset from [here](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small/download?datasetVersionNumber=1) and unzip its contents so that all the image files are in a directory called "_images_" in the [static](static) directory. 
 
-+ You can download the image files from Kaggle, use a script to generate the vector embeddings and load them into the cluster. To do this, download the dataset from [here](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small/download?datasetVersionNumber=1) and unzip its contents so that all the image files are in a directory called "_images_" in the [static](static) directory. Then, execute the encoder_and_loader.py script to generate the vector embeddings and load the data into your MongoDB Atlas cluster. Note this will take some time (as we're processing 44,000 images). The script is written to be multi-threaded so feel free to increase the number of threads based on your environment.
+Once this is done, you have two ways in which you can get the image data loaded into your MongoDB Atlas cluster:
+
++ You can execute the encoder_and_loader.py script to generate the vector embeddings and load the data into your MongoDB Atlas cluster from your client. This will take a fair bit of time as we're processing 44,000 images and because its running on the client side, increasing the cluster resources won't really help. The script is written to be multi-threaded so feel free to increase the number of threads based on your environment. On my M1 Macbook this took around 3 hrs to load.
 ```
 python3 encoder_and_loader.py
 ```
-+ Alternatively (__and this will be much quicker__) use the mongodump file to load this data directly into your cluster using the `mongorestore` command line tool. If you do chose to use this approach make sure you have the command line tools installed on your laptop. See [here]( ) for more details. Then restore the collection using the `mongorestore` command as per the following example (run this from the root directory of the repo), for example:
++ Alternatively (__and this will be much quicker__) use the mongodump file to load this data directly into your cluster using the `mongorestore` command line tool. If you do chose to use this approach make sure you clone this repo  have the command line tools installed on your laptop. See [here](https://www.mongodb.com/docs/database-tools/installation/installation/) for more details. Then restore the collection using the `mongorestore` command as per the following example (run this from the root directory of the repo), for example:
 ```sh
 mongorestore --uri mongodb+srv://<username><password>@anandorgdev.zbcqwov.mongodb.net --dir=MDBExport    
 ```
@@ -64,6 +66,7 @@ You should see the output end with after 2-3 minutes:
 2023-10-13T14:23:16.324+0100	44441 document(s) restored successfully. 0 document(s) failed to restore.
 anand.sanghani@M-FRFJ6FPH37 MDB-VectorSearch-Images % 
 ```
+__Important__: If you do chose to use this method then please be aware that the mongodump file containing the data is stored using [Git lfs](https://github.com/git-lfs/git-lfs/tree/main/docs) as it's around 444MB. So you will need to ensure that you have installed this on your machine and that you clone this repo using git lfs (e.g. `git lfs clone git@github.com:sanghani73/MDB-VectorSearch-Images.git`).
 
 ### Create Index
 

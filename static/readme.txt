@@ -1,0 +1,1 @@
+Downloand an add your images from https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small to this directory.
