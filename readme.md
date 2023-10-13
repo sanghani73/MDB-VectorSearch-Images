@@ -32,7 +32,7 @@ MONGODB_URI = "<enter your Atlas connection string here>"
 ```bash 
 pip install -r requirements.txt
 ```
-- Execute the encoder_and_loader.py script to generate the vector embeddings and load the data into your MongoDB Atlas cluster. Note this will take some time (as we're processing 44,000 images). The script is written to be multi-threaded so feel free to increase the number of threads based on your environment.
+- Download the image files from [here](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small/download?datasetVersionNumber=1) and unzip its contents so that all the image files are in a directory called "_images_" in the [static](static) directory. Then, execute the encoder_and_loader.py script to generate the vector embeddings and load the data into your MongoDB Atlas cluster. Note this will take some time (as we're processing 44,000 images). The script is written to be multi-threaded so feel free to increase the number of threads based on your environment.
 ```
 python3 encoder_and_loader.py
 ```
