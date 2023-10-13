@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Search</title>
+    <style>
+        .home button {
+            padding: 5px 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .home a {
+            padding: 5px 10px;
+            color: white;
+        }
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .search-box input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 500px; 
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+        .adv-src-fields input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width:200px; 
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+        .adv-src-fields-label {
+            width:200px; 
+            display: inline-block;
+            text-align: right;
+        }
+        .search-box button {
+            padding: 5px 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            /* margin-right: 5px; */
+        }
+        .row {
+            display: flex;
+            padding: 5px;
+            /* margin: auto; */
+        }
+        .spinner {
+            display: none;
+            font-size: 24px;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+        }
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: auto;
+            }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            margin: auto;
+            justify-content: center;
+        }
+        .product {
+            width: calc(20% - 20px);
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center; /* Center align content */
+        }
+
+        .movie img {
+            max-width: 50%; /* Reduce image size by 50% */
+            display: block;
+            margin: 0 auto; /* Center align image horizontally */
+        }
+
+        .movie h2 {
+            margin-top: 0;
+        }
+
+    </style>
+<header>
+    <div class="home"> 
+    <button>
+        <a href="/">Back</a>
+    </button></div>
+  </header>    
+</head>
+<body>
+    <div class="search-box">
+        <h1>Advanced Product Search</h1>
+        <form id="search-form" action="/advanced" method="POST">
+            <div class="row">
+                    <div class="adv-src-fields-label">
+                        <label for="search_query">Enter Search</label>
+                    </div>
+                    <input type="text" name="search_query" placeholder="What are you looking for?" value="{{ search_query }}" required>
+                    <button type="submit" class="loading">
+                        <span class="spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                        Go
+                    </button>
+            </div>
+            <div class="row"> 
+                <div class="adv-src-fields">
+                    <div class="adv-src-fields-label">
+                        <label for="maxPrice">Max Price</label>
+                    </div>
+                    <input type="text" name="maxPrice" placeholder="Max price (default 100)" value="{{ maxPrice }}" style="width: 400;">
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="adv-src-fields">
+                    <div class="adv-src-fields-label">
+                        <label for="minRating">Minimum Rating</label>
+                    </div>
+                    <input type="text" name="minRating" placeholder="Min Rating (default 1)" value="{{ minRating }}">
+                </div>
+            </div>
+            <div class="row"> 
+                {% if results %}
+                    <p style="margin-left: 100px;">Order By: 
+                    {% if sortBy == "relevance" %}
+                        <input type="radio" id="relevancy" name="sortBy" value="relevance" checked><label for="relevancy">More Relevant</label>
+                    {% else %}
+                        <input type="radio" id="relevancy" name="sortBy" value="relevance"<label for="relevancy">More Relevant</label>
+                    {% endif %}
+                    {% if sortBy == "price" %}
+                        <input type="radio" id="price" name="sortBy" value="price" checked><label for="price">Price</label>
+                    {% else %}
+                        <input type="radio" id="price" name="sortBy" value="price"><label for="price">Price</label>
+                    {% endif %}
+                    {% if sortBy == "rating" %}
+                        <input type="radio" id="rating" name="sortBy" value="rating" checked><label for="rating">Average Rating</label>
+                        {% else %}
+                        <input type="radio" id="rating" name="sortBy" value="rating"><label for="rating">Average Rating</label>
+                    {% endif %}
+                    </p>
+                {% else %}
+                    <p style="margin-left: 100px;">Order By: 
+                        <input type="radio" id="relevancy" name="sortBy" value="relevance" checked><label for="relevancy">More Relevant</label>
+                        <input type="radio" id="price" name="sortBy" value="price"><label for="price">Price</label>
+                        <input type="radio" id="rating" name="sortBy" value="rating"><label for="rating">Average Rating</label>
+                {% endif %}
+                </p>
+            </div>
+
+        </form>
+        <div class="search-results">
+            {% if results %}
+            <h4>Search Results</h4>
+            <div class="products">
+                    {% for product in results %}
+                        <div class="product">
+                            <img src="{{ url_for('static', filename=product.imageFile) }}" alt="{{ product.imageFile }}" width="100">
+                            <p>Price: ${{ product.price }}</p>
+                            <p>Average Rating: {{ product.averageRating }}</p>
+                            <!-- <p>Discount: {{ product.discountPercentage }}%</p> -->
+                            <p>Search score: {{ product.score }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

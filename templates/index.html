@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Search</title>
+    <style>
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .search-box input[type="text"] {
+            /* flex: 1; */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 600px; 
+            margin-right: 5px;
+        }
+        .search-box button {
+            padding: 5px 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .row {
+            display: flex;
+            padding: 5px;
+            margin: auto;
+        }
+        .spinner {
+            display: none;
+            font-size: 24px;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+        }
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: auto;
+            }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            margin: auto;
+            justify-content: center;
+        }
+        .product {
+            width: calc(20% - 20px);
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center; /* Center align content */
+        }
+
+        .movie img {
+            max-width: 50%; /* Reduce image size by 50% */
+            display: block;
+            margin: 0 auto; /* Center align image horizontally */
+        }
+
+        .movie h2 {
+            margin-top: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="search-box">
+        <h1>Product Search</h1>
+        <div class="row">
+            <form id="search-form" action="/" method="POST">
+                <div class="row">
+                    <input type="text" name="search_query" placeholder="What are you looking for?" value="{{ search_query }}" required>
+                    <button type="submit" class="loading">
+                        <span class="spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                        Go
+                    </button>
+                </div>
+                <div hidden> 
+                    <input type="radio" id="relevancy" name="sortBy" value="relevancy" checked="checked"><label for="relevancy">More Relevant</label>
+                </div>
+                </form>
+            <form id="adv-search-form" action="/advanced" method="GET">
+                <div class="row">
+                    <button type="submit" class="loading">
+                        <span class="spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                        Advanced
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="search-results">
+            {% if results %}
+            <h4>Search Results</h4>
+            <div class="products">
+                    {% for product in results %}
+                        <div class="product">
+                            <img src="{{ url_for('static', filename=product.imageFile) }}" alt="{{ product.imageFile }}" width="100">
+                            <p>Price: ${{ product.price }}</p>
+                            <p>Average Rating: {{ product.averageRating }}</p>
+                            <p>Discount: {{ product.discountPercentage }}%</p>
+                            <p>Search score: {{ product.score }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

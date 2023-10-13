@@ -5,17 +5,12 @@ import settings
 
 app = Flask(__name__, static_folder="static")
 
-
 mongo_uri = settings.MONGODB_URI
 db_name = settings.DB
 collection_name = settings.COLLECTION
 
-#Load CLIP model
 preTrainedModelName = "clip-ViT-L-14"
 model = SentenceTransformer(preTrainedModelName)
-
-# Define the folder where image files are stored on the server
-# app.config['UPLOAD_FOLDER'] = 'setup/images'  # Change 'images' to your folder name
 
 @app.route('/images/<filename>')
 def serve_image(filename):
@@ -37,12 +32,13 @@ def search(search_query):
     results = run_query(search_query)
     return render_template('index.html', results=results, search_query=search_query)
 
+# regular search with no filter
 def run_query(search_query):
     client = MongoClient(mongo_uri)
     db = client[db_name]
     collection = db[collection_name]
     print('running query with', search_query)
-    # regular search with no filter
+
     search = {
             "$vectorSearch": {
                 "index": "default",
@@ -94,12 +90,13 @@ def advancedSearch(search_query, maxPrice, minRating, sortBy):
     results = run_advanced_query(search_query, maxPrice, minRating, sortBy)
     return render_template('advanced.html', results=results, search_query=search_query, maxPrice=maxPrice, minRating=minRating, sortBy=sortBy)
 
+# Advanced search with filter
 def run_advanced_query(search_query, maxPrice, minRating, sortBy):
     client = MongoClient(mongo_uri)
     db = client[db_name]
     collection = db[collection_name]
     print('running query with', search_query, maxPrice, minRating, sortBy)
-    # regular search with no filter
+
     search = {
             "$vectorSearch": {
                 "index": "default",
@@ -114,24 +111,7 @@ def run_advanced_query(search_query, maxPrice, minRating, sortBy):
                 }
             }
         }
-    # if (maxPrice != -1) and (minRating != -1):
-    #     # Both maxPrice and minRating supplied
-    #     search['$vectorSearch']['filter'] = {
-    #                 "$and": [{"price": {"$lt": maxPrice}},
-    #                         {"averageRating": {"$gte": minRating}}
-    #                 ]
-    #             }
-    # elif (maxPrice != -1) and (minRating == -1):
-    #     # Only maxPrice supplied
-    #     search['$vectorSearch']['filter'] = {
-    #                 "$and": [{"price": {"$lt": maxPrice}}]
-    #             }
-    # elif (maxPrice == -1) and (minRating != -1):
-    #     # Only minRating supplied
-    #     search['$vectorSearch']['filter'] = {
-    #                 "$and": [{"averageRating": {"$gte": minRating}}]
-    #             }
-        
+    
     project =  {
             "$project": {
                 "imageVector": {"$slice": ["$imageVector", 5]},
