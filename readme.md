@@ -67,7 +67,7 @@ You should see the output end with after 2-3 minutes:
 2023-10-13T14:23:16.324+0100	44441 document(s) restored successfully. 0 document(s) failed to restore.
 anand.sanghani@M-FRFJ6FPH37 MDB-VectorSearch-Images % 
 ```
-__Important__: If you do chose to use this method then please be aware that the mongodump file containing the data is stored using [Git lfs](https://github.com/git-lfs/git-lfs/tree/main/docs) as it's around 444MB. So you will need to ensure that you have installed this on your machine and that you clone this repo using git lfs (e.g. `git lfs clone git@github.com:sanghani73/MDB-VectorSearch-Images.git`).
+__Important__: If you do chose to use this method then please be aware that the mongodump file containing the data is stored using [Git lfs](https://git-lfs.com/) as it's around 200MB. So you will need to ensure that you have installed this on your machine and that you clone this repo using git lfs (e.g. `git lfs clone git@github.com:sanghani73/MDB-VectorSearch-Images.git`).
 
 ### Create Index
 
