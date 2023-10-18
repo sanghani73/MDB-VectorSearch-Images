@@ -46,7 +46,7 @@ python3 encoder_and_loader.py
 + Alternatively (__and this will be much quicker__) use the mongodump file to load this data directly into your cluster using the `mongorestore` command line tool. If you do chose to use this approach make sure you clone this repo  have the command line tools installed on your laptop. See [here](https://www.mongodb.com/docs/database-tools/installation/installation/) for more details. Then restore the collection using the `mongorestore` command as per the following example (run this from the MongoDBExportZip directory of the repo), for example:
 ```sh
 cd MDBExportZip
-mongorestore --uri mongodb+srv://<username>:<password>@anandorgdev.zbcqwov.mongodb.net --dir=MDBExport    
+mongorestore --uri mongodb+srv://<username>:<password>@anandorgdev.zbcqwov.mongodb.net --gzip
 ```
 You should see the output end with after 2-3 minutes:
 ```
