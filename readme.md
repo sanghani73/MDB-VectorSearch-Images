@@ -24,7 +24,9 @@ The demo also shows how additional filtering can be applied in combination with 
 
 ## Set Up
 ### MongoDB Atlas
-Configure a MongoDB Atlas cluster running version 7.0.2 or greater and update the connection details in [settings.py](settings.py)
+Configure a MongoDB Atlas cluster following the instructions from [here](https://www.mongodb.com/docs/atlas/getting-started/).
+If you create a dedicated cluster, ensure that your chose the latest version (it should running version 7.0.2 or greater) and update the connection details in [settings.py](settings.py).
+Note 
 ```
 MONGODB_URI = "<enter your Atlas connection string here>"
 ```
@@ -97,9 +99,14 @@ Create the search index on the database and collection specified in [settings.py
 
 
 ## Run
-To start the demo application, run [app.py](app.py)
+To start the demo application, run [app.py](app.py) if you are running this on an Atlas cluster that is running 7.0.2 or greater.
 ```python
 python3 app.py
+```
+If however you created this on a sandbox (or other shared cluster) and the version is less that 7.0.2 then run [app-MDBv6.py](app-MDBv6.py) as this will use the [knnBeta](https://www.mongodb.com/docs/atlas/atlas-search/knn-beta/) search operator (which has been deprecated so will stop working at some point in time).
+
+```python
+python3 app-MDBv6.py
 ```
 This will launch the app in a local `flask` server on the default port [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
